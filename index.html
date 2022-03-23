@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+
+    <!-- Bootstrap and Jquery UI stylesheets -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+   
+    <!-- Custom stylesheet -->
+    <link rel="stylesheet" href="css/main.css">
+
+</head>
+<body>
+
+<!-- Navbar to get to other pages -->
+    <nav class="navbar navbar-dark">
+        <div class="container-fluid">
+
+            <!-- Create event button -->
+            <div class="col-sm-2">
+                <button id="create-event-btn" style="float: left;" class="btn btn-danger">Create Event</button>
+            </div>
+
+            <!-- Previous month button -->
+            <div class="col-sm-2 centered" style="text-align: center;">
+                <button class="btn btn-outline-secondary" id="change_month_left">&#60;</button>
+            </div>
+
+            <!-- Month and Year display -->
+            <div class="col-sm-4" style="text-align: center;">
+                <h1 id="month">January</h1>
+            </div>
+
+            <!-- Next month button -->
+            <div class="col-sm-2" style="text-align: center;">
+                    <button class="btn btn btn-outline-secondary" id="change_month_right">&#62;</button>
+            </div>
+            <div class="col-sm-2">
+                <!-- Login button -->
+                <div id="show-login-btn">
+                    <button id="login-btn-sit" style="float: right;" class="btn btn-success">Login</button>
+                </div> 
+                <!-- Logout button -->
+                <div id="user-welcome">
+                    <button id="logout-btn" style="float: right;" class="btn btn-warning inline">Logout</button>
+                </div>
+            </div>
+            
+        </div>
+    </nav>
+  
+  <!-- Login/Register Modal -->
+  <div class="modal fade" id="login-modal" tabindex="-1" aria-labelledby="login-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+
+            <!-- Displayed when in login mode -->
+            <div class="modal-login-active">
+                <h5 class="modal-title" id="modal-login-title-login">Login</h5>
+            </div>
+
+            <!-- Displayed when in register mode -->
+            <div class="modal-register-active">
+                <h5 class="modal-title" id="modal-login-title-register">Register</h5>
+            </div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+            <!-- Login form (Displayed when in login mode) -->
+            <div class="modal-login-active">  
+                <div class="alert alert-danger" id="login-error" role="alert"></div>
+                <input class="form-control mr-sm-2" id="login-email" style="margin-bottom: 10px;" type="email" placeholder="Email">
+                <input class="form-control mr-sm-2" id="login-password" style="margin-bottom: 10px;" type="password" placeholder="Password">
+                <button class="btn btn-success" id="login-btn">Login</button>
+            </div>
+
+            <!-- Register form (Displayed when in register mode) -->
+            <div class="modal-register-active">
+                <div class="alert alert-danger" id="register-error" role="alert"></div>
+                <input class="form-control mr-sm-2" id="register-email" style="margin-bottom: 10px;" type="email" placeholder="Email">
+                <input class="form-control mr-sm-2" id="register-password" style="margin-bottom: 10px;" type="password" placeholder="Password">
+                <input class="form-control mr-sm-2" id="register-password-confirm" style="margin-bottom: 10px;" type="password" placeholder="Confirm Password">
+                <button class="btn btn-success" id="register-btn">Register</button>
+            </div>
+        </div>
+        <div class="modal-footer">
+
+            <!-- Switch to Register Mode -->
+            <div class="modal-login-active">
+                <p>Dont have an Account? Click <a class="login-switch-btn" href="#">here</a> to create one</p>
+            </div>
+
+            <!-- Switch to login mode -->
+            <div class="modal-register-active">
+                <p>Already have an Account? Click <a class="login-switch-btn" href="#">here</a> to login</p>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Event Modal -->
+  <div class="modal fade" id="create-event-modal" tabindex="-1" aria-labelledby="create-event-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Create Event</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <!-- Create Event form -->
+        <div class="modal-body">
+            <div class="alert alert-danger" id="create-event-error" role="alert"></div>
+            <div class="input-group mb-3">
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="create-event-title" placeholder="Add title">
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="col-sm-12">
+                    <textarea id="create-event-description" placeholder="description" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="col-sm-8">
+                    <input type="datetime-local" class="form-control" id="create-event-date">
+                </div>
+                <div class="col-sm-4">
+                    <select id="create-event-color" class="form-control">
+                        <option style="background-color: red;" selected>Red</option>
+                        <option style="background-color: orange;">Orange</option>
+                        <option style="background-color: yellow;">Yellow</option>
+                        <option style="background-color: Green;">Green</option>
+                        <option style="background-color: Purple;">Purple</option>
+                        <option style="background-color: Blue;">Blue</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="create-event-share-user" placeholder="Share with user">
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="col-sm-12">
+                    <button type="submit" style="width: 100%;" class="btn btn-success" id="create-event-btn-final">Create</button>
+                </div>
+
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Event Modal -->
+  <div class="modal fade" id="edit-event-modal" tabindex="-1" aria-labelledby="edit-event-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Edit Event</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <!-- Edit event form -->
+        <div class="modal-body">
+            <div class="alert alert-danger" id="edit-event-error" role="alert"></div>
+            <div class="input-group mb-3">
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="edit-event-title" placeholder="Add title">
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="col-sm-12">
+                    <textarea id="edit-event-description" placeholder="description" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="col-sm-8">
+                    <input type="datetime-local" class="form-control" id="edit-event-date">
+                </div>
+                <div class="col-sm-4">
+                    <select id="edit-event-color" class="form-control">
+                        <option style="background-color: red;" selected>Red</option>
+                        <option style="background-color: orange;">Orange</option>
+                        <option style="background-color: yellow;">Yellow</option>
+                        <option style="background-color: Green;">Green</option>
+                        <option style="background-color: Purple;">Purple</option>
+                        <option style="background-color: Blue;">Blue</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="edit-event-share-user" placeholder="Share with user">
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="col-sm-6">
+                    <input type="hidden" name="id" id="delete-event-id">
+                    <button type="submit" style="width: 100%;" class="btn btn-danger" id="delete-event-btn">Delete</button>
+                </div>
+                <div class="col-sm-6">
+                    <input type="hidden" id="edit-event-id">
+                    <button type="submit" style="width: 100%;" class="btn btn-success" id="edit-event-btn-final">Edit</button>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Login success alert-->
+<div class="alert alert-success alert-dismissible fade show" id="login-success" style="display: none;" role="alert"><p>SUCCESS: You are now logged in!</p>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<!-- Logout success alert -->
+<div class="alert alert-success alert-dismissible fade show" id="logout-success" style="display: none;" role="alert"><p>SUCCESS: You are have been logged out!</p>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<!-- Error alert -->
+<div class="alert alert-danger alert-dismissible fade show" id="alert-error" style="display: none;" role="alert"><p>ERROR: You must be the owner of the event to do this!</p>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<!-- Calendar container-->
+  <div id="calendar">
+    <div class="container">
+
+        <!-- Calendar day names -->
+        <div class="row" id="cal-struct-days">
+            <div class="col-sm struct-day">
+                <h5>Sunday</h5>
+            </div>
+            <div class="col-sm struct-day">
+                <h5>Monday</h5>
+            </div>
+            <div class="col-sm struct-day">
+                <h5>Tuesday</h5>
+            </div>
+            <div class="col-sm struct-day">
+                <h5>Wednsday</h5>
+            </div>
+            <div class="col-sm struct-day">
+                <h5>Thursday</h5>
+            </div>
+            <div class="col-sm struct-day">
+                <h5>Friday</h5>
+            </div>
+            <div class="col-sm struct-day">
+                <h5>Saturday</h5>
+            </div>
+        </div>
+
+        <!-- Container to hold calendar (Filled by javascript) -->
+        <div id="calendar-days">
+            
+        </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Javascript Scripts -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+ 
+  <!-- Custom Javascript -->
+  <script src="js/login.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/event.js"></script>
+</body>
+</html>
+
+        
