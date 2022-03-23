@@ -1,17 +1,8 @@
-# CSE330
-473590 474204
+# Event Calendar
 
-[Link to Calendar](http://ec2-3-129-148-71.us-east-2.compute.amazonaws.com/calendar/)
+This project was completed as the final project for module 5 of CSE 330. The calendar features timed events like Apple's or Google's calendar apps which allow you to create events or reminders for a certain time and day. Groups can be categorized by types and can be moved by manually changing the date, or dragging and dropping the event into another day. Calendars are also sharable with other users.
 
-## Created Accounts
-
-These are some accounts that we created and already have events created but feel free to create more 
-
- | Email                   | Password |
-|-------------------------|----------|
-| silberstein75@gmail.com | asdf     |
-| user3@gmail.com         | asdf     |
-| michaelyang@gmail.com   | test     |
+![Calendar Image](/res/calendar.png)
 
 ## Creative Portion
 1. Shared Events
